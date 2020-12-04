@@ -20,6 +20,9 @@ class Navbar extends Component {
                         <NavLink className="nav-item nav-link" to="/rentals">
                             Retals
                         </NavLink>
+                        <NavLink className="nav-item nav-link" to="/register">
+                            Register
+                        </NavLink>
                     </ul>
                 </div>
                 <Link className="text-white" to="/login">Login</Link>

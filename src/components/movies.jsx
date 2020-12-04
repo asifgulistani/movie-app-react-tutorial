@@ -6,6 +6,7 @@ import ListGroup from './common/listGroup';
 import Pagination from "./common/pagination";
 import MoviesTable from './moviesTable';
 import get from '../utils/object';
+import { Link } from 'react-router-dom';
 
 class Movies extends Component {
     state = { 
@@ -133,6 +134,10 @@ class Movies extends Component {
                         onItemSelected={this.handleGenreSelected} />
                 </div>
                 <div className="col">
+                    <Link to="/movies/new" className="btn btn-primary mb-2">
+                        Add Movie
+                    </Link>
+                    
                     <MoviesTable 
                         movies={movies} 
                         onSort={this.handleSort} 

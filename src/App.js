@@ -7,24 +7,28 @@ import Rentals from './components/rentals';
 import NotFound from './components/notFound';
 import MovieForm from './components/movieForm';
 import LoginForm from './components/loginForm';
+import RegisterForm from './components/registerForm';
+import NewMovie from './components/newMovie';
 
 function App() {
   return (
     <React.Fragment>
       <Router>
-        <Navbar/>
-        <main role="main" className="container pt-5">
-          <Switch>
-            <Route path="/movies/:id" component={MovieForm}></Route>
-            <Route path="/movies" component={Movies}></Route>
-            <Route path="/customers" component={Customers}></Route>
-            <Route path="/rentals" component={Rentals}></Route>
-            <Route path="/login" component={LoginForm}></Route>
-            <Route path="/not-found" component={NotFound}></Route>
-            <Redirect from="/" exact to="/movies" />
-            <Redirect to="/not-found" />
-          </Switch>
-        </main>
+          <Navbar/>
+          <main role="main" className="container pt-5">
+              <Switch>
+                <Route path="/movies/new" component={NewMovie}></Route>
+                <Route path="/movies/:id" component={MovieForm}></Route>
+                <Route path="/movies" component={Movies}></Route>
+                <Route path="/login" component={LoginForm}></Route>
+                <Route path="/register" component={RegisterForm}></Route>
+                <Route path="/customers" component={Customers}></Route>
+                <Route path="/rentals" component={Rentals}></Route>
+                <Route path="/not-found" component={NotFound}></Route>
+                <Redirect from="/" exact to="/movies" />
+                <Redirect to="/not-found" />
+              </Switch>
+          </main>
       </Router>
     </React.Fragment>
   );
