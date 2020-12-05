@@ -17,8 +17,7 @@ function App() {
           <Navbar/>
           <main role="main" className="container pt-5">
               <Switch>
-                <Route path="/movies/new" component={NewMovie}></Route>
-                <Route path="/movies/:id" component={MovieForm}></Route>
+                <Route path="/movies/:id" component={NewMovie}></Route>
                 <Route path="/movies" component={Movies}></Route>
                 <Route path="/login" component={LoginForm}></Route>
                 <Route path="/register" component={RegisterForm}></Route>

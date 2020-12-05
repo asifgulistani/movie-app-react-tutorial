@@ -1,59 +1,72 @@
 import React, { Component } from 'react';
 import Joi from 'joi-browser';
 import Form from './common/form';
+import { getMovie, saveMovie } from '../services/fakeMovieService';
 import { getGenres } from '../services/fakeGenreService';
 
 class NewMovie extends Form {
     
     state = { 
-        genres: getGenres(),
+        genres: [],
         data: {
             title: '',
-            genre: '',
-            stock: '',
-            rate: ''
+            genreId: '',
+            numberInStock: '',
+            dailyRentalRate: ''
         },
         errors: {}
      }
 
+    schema = {
+        _id: Joi.string(),
+        title: Joi.string().min(3).required(),
+        genreId: Joi.string().required(),
+        numberInStock: Joi.number().min(0).max(100).required(),
+        dailyRentalRate: Joi.number().min(0).max(10).required(),
+    };
+
     componentDidMount(){
         const genres = getGenres();
-        console.log('from did mount ',genres);
         this.setState({genres});
+
+        //decide if adding new or editing the existance of a movie
+        const movieId = this.props.match.params.id;
+        
+        if (movieId === 'new') return;
+
+        const movie = getMovie(movieId);
+        if (!movie) return this.props.history.replace('/not-found');
+
+        this.setState({ data: this.mapToViewModel(movie) });
     }
 
-    schema = {
-        title: Joi.string().min(3).required(),
-        genre: Joi.string().required(),
-        stock: Joi.number().min(0).max(100).required(),
-        rate: Joi.number().min(0).max(10).required(),
-    };
+    mapToViewModel(movie){
+        return {
+            _id: movie._id,
+            title: movie.title,
+            genreId: movie.genre._id,
+            numberInStock: movie.numberInStock,
+            dailyRentalRate: movie.dailyRentalRate,
+        };
+    }
         
     doSubmit = e => {
-        console.log('submitted');
+        const movie = {...this.state.data};
+        saveMovie(movie);
+        this.props.history.push('/movies');
     }
 
     render() { 
-        const {data, errors} = this.state;
+        const {genres} = this.state;
+        
         return ( 
             <div className="row pt-2">
                 <div className="col-4 offset-4">
                     <form onSubmit={this.handleSubmit}>
                         {this.renderInput('title','Title')}
-                        <div class="form-group">
-                            <label for="genre">Genre</label>
-                            <select 
-                                className="form-control" 
-                                value={data.genre}
-                                onChange={this.handleInputChange}
-                                error={errors.genre}
-                                id="genre" >
-                                    <option value="">. . . </option>
-                                    {this.state.genres.map(genre => <option key={genre._id} value={genre._id}>{genre.name}</option>)}
-                            </select>
-                        </div>
-                        {this.renderInput('stock','Number in Stock', 'number')}
-                        {this.renderInput('rate','rate', 'number')}
+                        {this.renderSelect('genreId', 'Genre', genres)}
+                        {this.renderInput('numberInStock','Number in Stock', 'number')}
+                        {this.renderInput('dailyRentalRate','Rate', 'number')}
                         {this.renderSubmitBtn('Save movie')}
                     </form>
                 </div>
